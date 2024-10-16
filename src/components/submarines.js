@@ -9,7 +9,7 @@ const Submarines = () => {
           <div className="flex items-center gap-3">
             <figure className="w-9 h-9 rounded-lg">
               <img
-                src="images/Submarine.svg"
+                src="images/submarine-2.svg"
                 width={40}
                 height={40}
                 alt="Submarine"
