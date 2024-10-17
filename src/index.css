@@ -149,3 +149,11 @@ body {
 .text-field::placeholder {
   @apply text-zinc-400
 }
+
+.no-border {
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}

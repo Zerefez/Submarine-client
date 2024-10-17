@@ -29,7 +29,19 @@ const Submarines = () => {
           <div className="flex items-center gap-3">
             <ButtonPrimary
               label="Select submarine"
-              icon="arrow_drop_down_circle"
+              icon ="arrow_drop_down"
+              isDropdown={true}
+              options={[
+                { value: "1", label: "Zerefez" },
+                { value: "2", label: "KHALed" },
+                { value: "3", label: "Muhandizi" },
+                { value: "4", label: "shah rukh khanizzi" },
+                { value: "5", label: "AHmadizzi Uchiha" },
+                { value: "6", label: "DAnielizzi" },
+                { value: "7", label: "ERMRZZI" },
+                { value: "8", label: "CHrisizzi" },
+                { value: "9", label: "ALIZZI" }
+              ]}
             />
             <ButtonOutline
               href="#about"
@@ -38,8 +50,7 @@ const Submarines = () => {
             />
           </div>
         </div>
-
-        <div className="hidden lg:block">
+        <div className="w-full h-auto lg:grid-cols-1">
           <figure className="w-full ml-auto bg-gradient-to-t from-sky-700 via-25% via-sky-900/40 to-65% rounded-[60px] overflow-hidden mt-20 ">
             <img
               src="/images/submarine.png"
