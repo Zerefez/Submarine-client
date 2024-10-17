@@ -1,61 +1,83 @@
+import React from 'react';
 import {
     CartesianGrid,
     Legend,
     Line,
     LineChart,
+    ResponsiveContainer,
     Text,
     Tooltip,
     XAxis,
     YAxis
 } from 'recharts';
-  function Graph(props) {
-    const { data, label, name, title } = props;
-  
-    console.log('DATA RECIEVED!!', data);
-  
-    return (
-      <div>
+
+function Graph({ data, title }) {
+  return (
+    <div className="relative p-4 rounded-2xl bg-zinc-800 hover:bg-zinc-700/50 active:bg-zinc-700/60 ring-1 ring-inset ring-zinc-50/5 transition-colors shadow-md">
+      <div className="text-center mb-4">
         <Text
-          x={500} // Adjust the position as needed
-          y={30} // Adjust the position as needed
-          textAnchor="middle" // Align text to the middle
-          fontSize="50px"
+          x={500}
+          y={30}
+          textAnchor="middle"
+          fontSize="30px"
           fontWeight="bold"
-          fill="#333" // Text color
+          fill="#FFF"
         >
           {title}
         </Text>
-  
-        <LineChart
-          className="shadow-md rounded mt-[5px] p-10 border ml-10"
-          width={1000}
-          height={600}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="created_at" />
-          <YAxis yAxisId="left" label={label} />
-          <Tooltip />
-          <Legend />
-          <Line
-            yAxisId="left"
-            type="monotone"
-            dataKey="measurement_data"
-            stroke="#ba0921"
-            strokeWidth={3}
-            activeDot={{ r: 8 }}
-            name={name}
-          />
-        </LineChart>
       </div>
-    );
-  }
-  
-  export default Graph;
-  
+
+      <div className="rounded-xl bg-zinc-800 p-5 shadow-lg">
+        <ResponsiveContainer width="100%" height={600}>
+          <LineChart
+            data={data}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#4A5568" />
+            <XAxis dataKey="time" stroke="#A0AEC0" />
+            <YAxis label={{ value: "Values", angle: -90, position: 'insideLeft', fill: '#A0AEC0' }} stroke="#A0AEC0" />
+            <Tooltip />
+            <Legend />
+
+            {/* Line for Temperature */}
+            <Line
+              type="monotone"
+              dataKey="temperature_in"
+              stroke="#ba0921"
+              strokeWidth={3}
+              activeDot={{ r: 8 }}
+              name="Temperature (°C)"
+            />
+
+            {/* Line for Pressure */}
+            <Line
+              type="monotone"
+              dataKey="pressure"
+              stroke="#1f77b4"
+              strokeWidth={3}
+              activeDot={{ r: 8 }}
+              name="Pressure (hPa)"
+            />
+
+            {/* Line for CO2 Level */}
+            <Line
+              type="monotone"
+              dataKey="co2Level"
+              stroke="#2ca02c"
+              strokeWidth={3}
+              activeDot={{ r: 8 }}
+              name="CO2 Level (ppm)"
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
+
+export default Graph;
