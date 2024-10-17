@@ -52,8 +52,22 @@ const Navbar = ({ navOpen }) => {
       ref: null,
     },
     {
-      label: 'Work',
-      link: '#work',
+      label: 'Analytics',
+      link: '#analytics',
+      className: 'nav-link',
+      ref: null,
+    },
+
+    {
+      label: 'Mockdata',
+      link: '#mockdata',
+      className: 'nav-link',
+      ref: null,
+    },
+
+    {
+      label: 'Data',
+      link: '#data',
       className: 'nav-link',
       ref: null,
     },
@@ -64,8 +78,8 @@ const Navbar = ({ navOpen }) => {
       ref: null,
     },
     {
-      label: 'Contact',
-      link: '#contact',
+      label: 'User',
+      link: '#user',
       className: 'nav-link md:hidden',
       ref: null,
     },

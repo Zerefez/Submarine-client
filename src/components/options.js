@@ -17,7 +17,7 @@ const optionItem = [
 
 const Option = () => {
   return (
-    <section className="section">
+    <section id="analytics" className="section">
       <div className="container">
         <h2 className="headline-2">
           These are your test options
