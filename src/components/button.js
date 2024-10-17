@@ -58,7 +58,7 @@ const ButtonPrimary = ({
                     <a
                       href={href}
                       target={target}
-                      className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white flex items-center"
+                      className=" w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white flex items-center"
                     >
                       <span className="relative w-2 h-2 rounded-full bg-emerald-400 mr-2">
                         <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping"></span>
@@ -84,7 +84,7 @@ const ButtonPrimary = ({
                     <a
                       href={href}
                       target={target}
-                      className="px-4 py-2 text-zinc-400 dark:text-zinc-500 cursor-not-allowed flex items-center"
+                      className=" w-full px-4 py-2 text-zinc-400 dark:text-zinc-500 cursor-not-allowed flex items-center"
                     >
                       <span className="relative w-2 h-2 rounded-full bg-rose-700 mr-2">
                         <span className="absolute inset-0 rounded-full bg-rose-700 animate-ping"></span>
