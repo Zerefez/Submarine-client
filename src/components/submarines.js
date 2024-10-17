@@ -29,18 +29,20 @@ const Submarines = () => {
           <div className="flex items-center gap-3">
             <ButtonPrimary
               label="Select submarine"
-              icon ="arrow_drop_down"
+              icon=""
               isDropdown={true}
-              options={[
+              availableOptions={[
                 { value: "1", label: "Zerefez" },
                 { value: "2", label: "KHALed" },
                 { value: "3", label: "Muhandizi" },
                 { value: "4", label: "shah rukh khanizzi" },
+              ]}
+              unavailableOptions={[
                 { value: "5", label: "AHmadizzi Uchiha" },
                 { value: "6", label: "DAnielizzi" },
                 { value: "7", label: "ERMRZZI" },
                 { value: "8", label: "CHrisizzi" },
-                { value: "9", label: "ALIZZI" }
+                { value: "9", label: "ALIZZI" },
               ]}
             />
             <ButtonOutline

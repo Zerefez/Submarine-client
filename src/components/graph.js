@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 import {
-    CartesianGrid,
-    Legend,
-    Line,
-    LineChart,
-    ResponsiveContainer,
-    Text,
-    Tooltip,
-    XAxis,
-    YAxis
-} from 'recharts';
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Text,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 function Graph({ data, title }) {
   return (
@@ -40,7 +40,15 @@ function Graph({ data, title }) {
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#4A5568" />
             <XAxis dataKey="time" stroke="#A0AEC0" />
-            <YAxis label={{ value: "Values", angle: -90, position: 'insideLeft', fill: '#A0AEC0' }} stroke="#A0AEC0" />
+            <YAxis
+              label={{
+                value: "Values",
+                angle: -90,
+                position: "insideLeft",
+                fill: "#A0AEC0",
+              }}
+              stroke="#A0AEC0"
+            />
             <Tooltip />
             <Legend />
 
