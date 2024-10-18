@@ -72,8 +72,8 @@ const Navbar = ({ navOpen }) => {
       ref: null,
     },
     {
-      label: "Reviews",
-      link: "#reviews",
+      label: "Contact",
+      link: "#contact",
       className: "nav-link",
       ref: null,
     },
