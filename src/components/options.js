@@ -3,15 +3,6 @@ import LinearWithValueLabel from "./data/progressbar";
 import Optioncard from "./optioncard";
 
 const Option = () => {
-  const [progress, setProgress] = useState([0, 0]); // Track progress for each test
-  const [isRunning, setIsRunning] = useState([false, false]); // Track if the progress is running
-
-  useEffect(() => {
-    // Reset progress when the page is refreshed
-    setProgress([0, 0]);
-    setIsRunning([false, false]);
-  }, []); // Empty dependency array ensures it runs on page load only
-
   const optionItems = [
     {
       icon: "not_started",
@@ -29,7 +20,24 @@ const Option = () => {
         handleStartTest(1); // Second test
       },
     },
+    {
+      icon: "not_started",
+      label: "Test pressure",
+      desc: "Start testing the pressure",
+      onStartTest: () => {
+        handleStartTest(2); // Third test
+      },
+    },
   ];
+
+  const [progress, setProgress] = useState(Array(optionItems.length).fill(0));
+  const [isRunning, setIsRunning] = useState(Array(optionItems.length).fill(false));
+  
+  useEffect(() => {
+    // Reset progress when the page is refreshed
+    setProgress(Array(optionItems.length).fill(0));
+    setIsRunning(Array(optionItems.length).fill(false));
+  }, [optionItems.length]);
 
   const handleStartTest = (index) => {
     if (isRunning[index]) return; // Prevent from running again if already running
@@ -81,7 +89,7 @@ const Option = () => {
               <div className="block my-3 ">
                 <div  className=" bg-zinc-800/50 p-3 rounded-2xl md:p-3 ">
                 <h3 className="text-zinc-300 mb-2">
-                  {index === 0 ? "Measuring Water Level" : "Measure Temperature"}
+                {isRunning[index] ? "Test in progress" : desc}
                 </h3>
                 <LinearWithValueLabel value={progress[index]} />
                 </div>
