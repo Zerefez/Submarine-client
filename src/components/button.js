@@ -6,6 +6,7 @@ const ButtonPrimary = ({
   href,
   target = "_self",
   label,
+  icon,
   classes,
   isDropdown,
   availableOptions,
@@ -39,6 +40,11 @@ const ButtonPrimary = ({
               d="m1 1 4 4 4-4"
             />
           </svg>
+          {icon ? (
+            <span className="material-symbols-rounded" aria-hidden="true">
+              {icon}
+            </span>
+          ) : undefined}
         </button>
         {isOpen && (
           <div className="z-10 absolute bg-zinc-200 divide-y divide-zinc-100 rounded-lg shadow w-44 dark:bg-zinc-700 dark:divide-zinc-600 mt-2">
@@ -105,11 +111,22 @@ const ButtonPrimary = ({
     );
   }
 
-  return <button className={"btn btn-primary " + classes}>{label}</button>;
+  return (
+    <button className={"btn btn-primary " + classes}>
+      {label}
+      {icon ? (
+        <span className="material-symbols-rounded" aria-hidden="true">
+          {icon}
+        </span>
+      ) : undefined}
+    </button>
+  );
 };
 
 ButtonPrimary.propTypes = {
   label: PropTypes.string.isRequired,
+  href: PropTypes.string,
+  icon: PropTypes.string,
   classes: PropTypes.string,
   isDropdown: PropTypes.bool,
   availableOptions: PropTypes.arrayOf(
