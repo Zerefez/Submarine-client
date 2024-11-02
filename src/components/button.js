@@ -110,7 +110,18 @@ const ButtonPrimary = ({
       </div>
     );
   }
-
+  if (href) {
+    return (
+      <a href={href} target={target} className={"btn btn-primary " + classes}>
+        {label}
+        {icon ? (
+          <span className="material-symbols-rounded" aria-hidden="true">
+            {icon}
+          </span>
+        ) : undefined}
+      </a>
+    );
+  }
   return (
     <button className={"btn btn-primary " + classes}>
       {label}

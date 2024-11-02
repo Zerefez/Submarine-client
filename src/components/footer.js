@@ -60,7 +60,7 @@ const Footer = () => {
             <h2 className="headline-2 mb-8 lg:max-w-[25ch]">
               If you want to support our team, you can donate here
             </h2>
-            <ButtonPrimary href="" label="Donation" icon="chevron_right" />
+            <ButtonPrimary href="https://www.paypal.com/donate/?hosted_button_id=UQA8G5A535H3C" target="_blank" label="Donation" icon="chevron_right" />
           </div>
           <div className=" grid grid-cols-2 gap-4 lg:pl-20">
             <div>
