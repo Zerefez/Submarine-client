@@ -1,7 +1,18 @@
-import React from "react";
-import { ButtonOutline, ButtonPrimary } from "./button";
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { fetchData } from '../apiService';
+import { ButtonOutline, ButtonPrimary } from './button';
 
 const Submarines = () => {
+  const [data, setData] = useState(null); // State to hold the response data
+
+  useEffect(() => {
+    async function testFetch() {
+      setData(await fetchData());
+    }
+
+    testFetch();
+  }, []);
   return (
     <section id="home" className="pt-28 lg:pt-36">
       <div className="w-full max-w-[1300px] mx-auto px-10 lg:grid lg:grid-cols-2 lg:gap-10">
@@ -32,17 +43,17 @@ const Submarines = () => {
               icon=""
               isDropdown={true}
               availableOptions={[
-                { value: "1", label: "Zerefez" },
-                { value: "2", label: "KHALed" },
-                { value: "3", label: "Muhandizi" },
-                { value: "4", label: "shah rukh khanizzi" },
+                { value: '1', label: 'Zerefez' },
+                { value: '2', label: 'KHALed' },
+                { value: '3', label: 'Muhandizi' },
+                { value: '4', label: 'shah rukh khanizzi' },
               ]}
               unavailableOptions={[
-                { value: "5", label: "AHmadizzi Uchiha" },
-                { value: "6", label: "DAnielizzi" },
-                { value: "7", label: "ERMRZZI" },
-                { value: "8", label: "CHrisizzi" },
-                { value: "9", label: "ALIZZI" },
+                { value: '5', label: 'AHmadizzi Uchiha' },
+                { value: '6', label: 'DAnielizzi' },
+                { value: '7', label: 'ERMRZZI' },
+                { value: '8', label: 'CHrisizzi' },
+                { value: '9', label: 'ALIZZI' },
               ]}
             />
             <ButtonOutline
@@ -64,6 +75,8 @@ const Submarines = () => {
           </figure>
         </div>
       </div>
+
+      <p>{data ? data : 'ingen data lige nu..'}</p>
     </section>
   );
 };
