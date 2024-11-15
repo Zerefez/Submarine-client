@@ -1,8 +1,7 @@
 async function fetchData() {
   try {
     const response = await fetch('http://192.168.0.1:8080/api/submarines');
-
-    // Check if the response is successful
+    console.log('Test from fetchData');
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }

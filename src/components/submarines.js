@@ -9,6 +9,7 @@ const Submarines = () => {
   useEffect(() => {
     async function testFetch() {
       setData(await fetchData());
+      console.log('Useeffect');
     }
 
     testFetch();
