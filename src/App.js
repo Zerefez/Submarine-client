@@ -1,10 +1,10 @@
 import Mockdata from './components/data/mockdata';
 import Options from './components/options';
-import About from './components/pages/about';
-import Contact from './components/pages/contact';
-import Footer from './components/pages/footer';
-import Header from './components/pages/header';
 import Submarines from './components/submarines';
+import About from './pages/about';
+import Contact from './pages/contact';
+import Footer from './pages/footer';
+import Header from './pages/header';
 
 function App() {
   return (
