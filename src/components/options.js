@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import LinearWithValueLabel from "./data/progressbar";
 import Optioncard from "./optioncard";
+import LinearWithValueLabel from "./progressbar";
 
 const Option = () => {
   const optionItems = [
