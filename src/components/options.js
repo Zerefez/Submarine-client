@@ -6,41 +6,45 @@ const Option = () => {
   const optionItems = [
     {
       icon: "not_started",
-      label: "Test Water Levels",
-      desc: "Start testing the water levels",
-      onStartTest: () => {
-        handleStartTest(0); // First test
+      label: "Test spring layers",
+      desc: "Start measuring the spring layers",
+      onStartTest: (depth) => {
+        handleStartTest(0, depth);
       },
+      requiresDepth: true,
     },
     {
       icon: "not_started",
-      label: "Test Temperature",
-      desc: "Start testing the temperature",
+      label: "Collect water sample",
+      desc: "Start collecting water sample",
       onStartTest: () => {
         handleStartTest(1); // Second test
-      },
-    },
-    {
-      icon: "not_started",
-      label: "Test pressure",
-      desc: "Start testing the pressure",
-      onStartTest: () => {
-        handleStartTest(2); // Third test
       },
     },
   ];
 
   const [progress, setProgress] = useState(Array(optionItems.length).fill(0));
   const [isRunning, setIsRunning] = useState(Array(optionItems.length).fill(false));
-  
+  const [depth, setDepth] = useState(""); // Track the depth for water levels test
+  const [isDepthValid, setIsDepthValid] = useState(true); // Check if depth is valid
+  const [errorMessage, setErrorMessage] = useState(""); // Error message for invalid depth
+  const [defaultMessage, setDefaultMessage] = useState(""); // Default message for depth
+
   useEffect(() => {
     // Reset progress when the page is refreshed
     setProgress(Array(optionItems.length).fill(0));
     setIsRunning(Array(optionItems.length).fill(false));
   }, [optionItems.length]);
 
-  const handleStartTest = (index) => {
+  const handleStartTest = (index, inputDepth) => {
     if (isRunning[index]) return; // Prevent from running again if already running
+
+    // If the depth is required but empty, set it to 500 by default
+    if (index === 0 && !inputDepth) {
+      setDepth("500");
+      setDefaultMessage("No input, 500 cm set as default");
+      inputDepth = "500"; // Set inputDepth to 500 if no input is provided
+    }
 
     setIsRunning((prevIsRunning) =>
       prevIsRunning.map((running, i) => (i === index ? true : running))
@@ -70,6 +74,20 @@ const Option = () => {
     }, 8000); // Stop after 8 seconds
   };
 
+  const handleDepthChange = (e) => {
+    const value = e.target.value;
+    setDepth(value);
+
+    // Validate the depth input (positive number and within 0-500)
+    if (value < 0 || value > 500) {
+      setIsDepthValid(false);
+      setErrorMessage("Depth must be between 0 and 500.");
+    } else {
+      setIsDepthValid(true);
+      setErrorMessage("");
+    }
+  };
+
   return (
     <section id="analytics" className="section">
       <div className="container">
@@ -78,24 +96,32 @@ const Option = () => {
           Using the options below, you can start testing.
         </p>
         <div className="grid grid-cols-[repeat(auto-fill,_minmax(250,_1fr))] gap-3">
-          {optionItems.map(({ icon, label, desc, onStartTest }, index) => (
-            <div key={index}>
-              <Optioncard
-                icon={icon}
-                label={label}
-                desc={desc}
-                onStartTest={onStartTest}
-              />
-              <div className="block my-3 ">
-                <div  className=" bg-zinc-800/50 p-3 rounded-2xl md:p-3 ">
-                <h3 className="text-zinc-300 mb-2">
-                {isRunning[index] ? "Test in progress" : desc}
-                </h3>
-                <LinearWithValueLabel value={progress[index]} />
+          {optionItems.map(
+            ({ icon, label, desc, onStartTest, requiresDepth }, index) => (
+              <div key={index}>
+                <Optioncard
+                  icon={icon}
+                  label={label}
+                  desc={desc}
+                  onStartTest={requiresDepth ? () => onStartTest(depth) : onStartTest}
+                  requiresDepth={requiresDepth}
+                  depthValue={depth}
+                  onDepthChange={handleDepthChange}
+                  isDepthValid={isDepthValid}
+                  errorMessage={errorMessage}
+                  defaultMessage={defaultMessage}
+                />
+                <div className="block my-3">
+                  <div className="bg-zinc-800/50 p-3 rounded-2xl md:p-3">
+                    <h3 className="text-zinc-300 mb-2">
+                      {label} progress: {progress[index]}%
+                    </h3>
+                    <LinearWithValueLabel value={progress[index]} />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
       </div>
     </section>
