@@ -85,7 +85,7 @@ const Lake3DContourPlot = () => {
       },
       paper_bgcolor: "rgba(0,0,0,0)", // Transparent background
       plot_bgcolor: "rgba(0,0,0,0)", // Transparent background
-    };    
+    };
 
     Plotly.newPlot("lakeDiv", data, layout);
   }, []);
@@ -93,7 +93,7 @@ const Lake3DContourPlot = () => {
   return (
     <section id="mockdata" className="section">
       <div className="container">
-        <div id="lakeDiv" className="relative p-4 rounded-2xl bg-zinc-800 ring-1 ring-inset ring-zinc-50/5 transition-colors shadow-md" style={{ width: "100%", height: "700px" }} />
+        <div id="lakeDiv" className="relative p-4 rounded-2xl bg-zinc-800 ring-1 ring-inset ring-zinc-50/5 transition-colors shadow-md w-full"/>
       </div>
     </section>
   );
