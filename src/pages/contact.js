@@ -100,8 +100,12 @@ const Contact = () => {
             ))}
           </div>
         </div>
-        
-        <form action="https://getform.io/f/axojdrob" method="POST" className=" xl:pl-10 2xl:pl-20 ">
+
+        <form
+          action="https://getform.io/f/axojdrob"
+          method="POST"
+          className=" xl:pl-10 2xl:pl-20 "
+        >
           <div className="md:grid md:items-center md:grid-cols-2 md:gap-2">
             <div className="">
               <label htmlFor="name" className="label">
@@ -132,6 +136,24 @@ const Contact = () => {
               ></input>
             </div>
           </div>
+          <div className="mb-4 mt-4">
+            <label htmlFor="subject" className="label">
+              Subject
+            </label>
+            <select name="subject" id="subject" required className="text-field">
+              <option value="" disabled selected>
+                Select an error code
+              </option>
+              <option value="error-400">Error 400 - Bad Request</option>
+              <option value="error-401">Error 401 - Unauthorized</option>
+              <option value="error-403">Error 403 - Forbidden</option>
+              <option value="error-404">Error 404 - Not Found</option>
+              <option value="error-500">
+                Error 500 - Internal Server Error
+              </option>
+            </select>
+          </div>
+
           <div className="mb-4">
             <label htmlFor="message" className="label">
               Message
@@ -144,7 +166,10 @@ const Contact = () => {
               className="text-field resize-y min-h-32 max-h-80"
             ></textarea>
           </div>
-          <button type="submit" className="btn btn-primary [&]:max-w-full w-full justify-center">
+          <button
+            type="submit"
+            className="btn btn-primary [&]:max-w-full w-full justify-center"
+          >
             Submit
           </button>
         </form>
