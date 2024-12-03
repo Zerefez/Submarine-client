@@ -10,9 +10,27 @@ import { useEffect, useState } from 'react';
 
 function App() {
   const [socket, setSocket] = useState(null);
+  const [status, setStatus] = useState(''); // Track WebSocket status
 
   useEffect(() => {
     const ws = new WebSocket('ws://192.168.0.1:8080/live');
+
+    console.log(ws);
+
+    if (ws.readyState === 0) {
+      console.log('WebSocket state: CONNECTING');
+      setStatus('CONNECTING');
+    } else if (ws.readyState === 1) {
+      console.log('WebSocket state: OPEN');
+      setStatus('OPEN');
+    } else if (ws.readyState === 2) {
+      console.log('WebSocket state: CLOSING');
+      setStatus('CLOSING');
+    } else if (ws.readyState === 3) {
+      console.log('WebSocket state: CLOSED');
+      setStatus('CLOSED');
+    }
+
     ws.onopen = () => console.log('WebSocket connected');
     ws.onclose = () => console.log('WebSocket disconnected');
     setSocket(ws);
@@ -27,7 +45,7 @@ function App() {
         <Submarines />
         <About />
         <Options />
-        <Mockdata socket={socket} />
+        <Mockdata socket={socket} status={status} />
         <Contact />
       </main>
       <Footer />

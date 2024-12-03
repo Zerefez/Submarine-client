@@ -44,7 +44,7 @@ class MockData {
 
 // 3D Contour Plot Component
 const Lake3DContourPlot = (props) => {
-  const { socket } = props;
+  const { socket, status } = props;
 
   const [chartData, setChartData] = useState([]);
   const [depthOverTime, setDepthOverTime] = useState([]);
@@ -138,6 +138,7 @@ const Lake3DContourPlot = (props) => {
 
   return (
     <section id="mockdata" className="section">
+      <h1>{status && status}</h1>
       <div className="container">
         <h2 className="headline-2 mb-12 lg:mb-0">MockData</h2>
         <div
