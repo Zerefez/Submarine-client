@@ -142,7 +142,7 @@ const Contact = () => {
             </label>
             <select name="subject" id="subject" required className="text-field">
               <option value="" disabled selected>
-                Select an error code
+                Select an error code{" "}
               </option>
               <option value="error-400">Error 400 - Bad Request</option>
               <option value="error-401">Error 401 - Unauthorized</option>

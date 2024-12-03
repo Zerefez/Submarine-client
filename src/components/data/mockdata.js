@@ -1,6 +1,9 @@
 import Plotly from "plotly.js-dist";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Areachart from "../areaChart";
+import StepChart from "../stepChart";
 
+// Mock Data Class
 class MockData {
   constructor(depth = 5, rows = 10, cols = 10) {
     this.depth = depth;
@@ -30,16 +33,38 @@ class MockData {
 
     return { temperature, oxygen, y };
   }
+  generateDepthOverTime() {
+    const depthLevels = [0, 1, 2, 4, 5];
+    return Array.from({ length: 20 }, (_, i) => ({
+      time: i,
+      depth: depthLevels[Math.floor(Math.random() * depthLevels.length)],
+    }));
+  }
 }
 
+// 3D Contour Plot Component
 const Lake3DContourPlot = () => {
+  const [chartData, setChartData] = useState([]);
+  const [depthOverTime, setDepthOverTime] = useState([]);
+
   useEffect(() => {
     const mock = new MockData();
     const { temperature, oxygen, y } = mock.generateData();
+    const depthData = mock.generateDepthOverTime();
 
     const z = temperature.map((tempRow, i) =>
       tempRow.map((temp, j) => temp + 0.1 * oxygen[i][j])
     );
+
+    const flatData = y.map((depth, i) => ({
+      depth,
+      temperature:
+        temperature[i].reduce((a, b) => a + b, 0) / temperature[i].length,
+      oxygen: oxygen[i].reduce((a, b) => a + b, 0) / oxygen[i].length,
+    }));
+
+    setChartData(flatData);
+    setDepthOverTime(depthData);
 
     const data = [
       {
@@ -53,12 +78,12 @@ const Lake3DContourPlot = () => {
         ],
         contours: {
           coloring: "heatmap",
-          showlines:false,
+          showlines: false,
         },
         colorbar: {
           title: "Temperature + Oxygen Effect",
-          tickfont: { color: "#D1D5DB" }, // White text on the color bar
-          titlefont: { color: "#D1D5DB" }, // White text for the color bar title
+          tickfont: { color: "#D1D5DB" },
+          titlefont: { color: "#D1D5DB" },
         },
       },
     ];
@@ -66,7 +91,7 @@ const Lake3DContourPlot = () => {
     const layout = {
       title: {
         text: "3D Lake Contour Plot",
-        font: { color: "#D1D5DB" }, // Equivalent of Tailwind's text-zinc-300
+        font: { color: "#D1D5DB" },
       },
       xaxis: {
         title: {
@@ -81,10 +106,10 @@ const Lake3DContourPlot = () => {
           font: { color: "#D1D5DB" },
         },
         tickfont: { color: "#D1D5DB" },
-        autorange: "reversed", // Ensures depth starts from the top
+        autorange: "reversed",
       },
-      paper_bgcolor: "rgba(0,0,0,0)", // Transparent background
-      plot_bgcolor: "rgba(0,0,0,0)", // Transparent background
+      paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor: "rgba(0,0,0,0)",
     };
 
     Plotly.newPlot("lakeDiv", data, layout);
@@ -93,7 +118,38 @@ const Lake3DContourPlot = () => {
   return (
     <section id="mockdata" className="section">
       <div className="container">
-        <div id="lakeDiv" className="relative p-4 rounded-2xl bg-zinc-800 ring-1 ring-inset ring-zinc-50/5 transition-colors shadow-md w-full" style={{width:"100%", height:"700px"}} />
+        <h2 className="headline-2 mb-12 lg:mb-0">MockData</h2>
+        <div
+          id="lakeDiv"
+          className="mt-12 relative p-4 rounded-2xl bg-zinc-800 ring-1 ring-inset ring-zinc-50/5 transition-colors shadow-md w-full"
+          style={{ width: "100%", height: "700px" }}
+        />
+        <div className="mt-12 lg:grid lg:grid-cols-2 lg:items-stretch">
+          <Areachart
+            data={chartData}
+            xKey="depth"
+            yKey="temperature"
+            yLabel="Temperature (°C)"
+            areaColor="#FF4500"
+            title="Temperature vs Depth"
+          />
+          <Areachart
+            data={chartData}
+            xKey="depth"
+            yKey="oxygen"
+            yLabel="Oxygen (mg/L)"
+            areaColor="#1E90FF"
+            title="Oxygen vs Depth"
+          />
+          <StepChart
+            data={depthOverTime}
+            xKey="time"
+            yKey="depth"
+            xLabel="Time(min)"
+            yLabel="Depth (m)"
+            title="Depth Over Time"
+          />
+        </div>
       </div>
     </section>
   );
