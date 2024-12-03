@@ -1,7 +1,7 @@
-import Plotly from "plotly.js-dist";
-import React, { useEffect, useState } from "react";
-import Areachart from "../areaChart";
-import StepChart from "../stepChart";
+import Plotly from 'plotly.js-dist';
+import React, { useEffect, useState } from 'react';
+import Areachart from '../areaChart';
+import StepChart from '../stepChart';
 
 // Mock Data Class
 class MockData {
@@ -43,9 +43,30 @@ class MockData {
 }
 
 // 3D Contour Plot Component
-const Lake3DContourPlot = () => {
+const Lake3DContourPlot = (props) => {
+  const { socket } = props;
+
   const [chartData, setChartData] = useState([]);
   const [depthOverTime, setDepthOverTime] = useState([]);
+  const [socketMessages, setSocketMessages] = useState([]);
+
+  useEffect(() => {
+    // Add WebSocket message listener
+    if (socket) {
+      const handleSocketMessage = (event) => {
+        console.log('Message received from server:', event.data);
+        // Update state with the received message
+        setSocketMessages((prevMessages) => [...prevMessages, event.data]);
+      };
+
+      socket.addEventListener('message', handleSocketMessage);
+
+      // Cleanup listener when component unmounts or socket changes
+      return () => {
+        socket.removeEventListener('message', handleSocketMessage);
+      };
+    }
+  }, [socket]);
 
   useEffect(() => {
     const mock = new MockData();
@@ -71,48 +92,48 @@ const Lake3DContourPlot = () => {
         z,
         y,
         x: Array.from({ length: temperature[0].length }, (_, i) => i),
-        type: "contour",
+        type: 'contour',
         colorscale: [
-          [0, "rgb(0,0,255)"],
-          [1, "rgb(255,0,0)"],
+          [0, 'rgb(0,0,255)'],
+          [1, 'rgb(255,0,0)'],
         ],
         contours: {
-          coloring: "heatmap",
+          coloring: 'heatmap',
           showlines: false,
         },
         colorbar: {
-          title: "Temperature + Oxygen Effect",
-          tickfont: { color: "#D1D5DB" },
-          titlefont: { color: "#D1D5DB" },
+          title: 'Temperature + Oxygen Effect',
+          tickfont: { color: '#D1D5DB' },
+          titlefont: { color: '#D1D5DB' },
         },
       },
     ];
 
     const layout = {
       title: {
-        text: "3D Lake Contour Plot",
-        font: { color: "#D1D5DB" },
+        text: '3D Lake Contour Plot',
+        font: { color: '#D1D5DB' },
       },
       xaxis: {
         title: {
-          text: "Horizontal Distance",
-          font: { color: "#D1D5DB" },
+          text: 'Horizontal Distance',
+          font: { color: '#D1D5DB' },
         },
-        tickfont: { color: "#D1D5DB" },
+        tickfont: { color: '#D1D5DB' },
       },
       yaxis: {
         title: {
-          text: "Depth (m)",
-          font: { color: "#D1D5DB" },
+          text: 'Depth (m)',
+          font: { color: '#D1D5DB' },
         },
-        tickfont: { color: "#D1D5DB" },
-        autorange: "reversed",
+        tickfont: { color: '#D1D5DB' },
+        autorange: 'reversed',
       },
-      paper_bgcolor: "rgba(0,0,0,0)",
-      plot_bgcolor: "rgba(0,0,0,0)",
+      paper_bgcolor: 'rgba(0,0,0,0)',
+      plot_bgcolor: 'rgba(0,0,0,0)',
     };
 
-    Plotly.newPlot("lakeDiv", data, layout);
+    Plotly.newPlot('lakeDiv', data, layout);
   }, []);
 
   return (
@@ -122,7 +143,7 @@ const Lake3DContourPlot = () => {
         <div
           id="lakeDiv"
           className="mt-12 relative p-4 rounded-2xl bg-zinc-800 ring-1 ring-inset ring-zinc-50/5 transition-colors shadow-md w-full"
-          style={{ width: "100%", height: "700px" }}
+          style={{ width: '100%', height: '700px' }}
         />
         <div className="mt-12 lg:grid lg:grid-cols-2 lg:items-stretch">
           <Areachart

@@ -1,5 +1,5 @@
-import MeasurementData from "./components/data/measurementData.js";
-import SubmarineData from "./components/data/submarineData.js";
+import MeasurementData from './components/data/measurementData.js';
+import SubmarineData from './components/data/submarineData.js';
 
 async function fetchData() {
   try {
@@ -45,8 +45,8 @@ class ApiService {
   async postRequest(endpoint, body = {}) {
     try {
       const response = await fetch(`${this.baseURL}/${endpoint}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
       if (!response.ok) {
@@ -60,7 +60,7 @@ class ApiService {
 
   // Fetch submarine data
   async getSubmarines() {
-    const rawData = await this.getRequest("submarines");
+    const rawData = await this.getRequest('submarines');
     return rawData.map(
       (data) =>
         new SubmarineData(
@@ -73,10 +73,10 @@ class ApiService {
         )
     );
   }
-  
+
   // Convert raw environmental data to MeasurementData array
   async getEnvironmentalMeasurements() {
-    const rawData = await this.getRequest("measurements/environment");
+    const rawData = await this.getRequest('measurements/environment');
     this.environmentData = rawData.map(
       (data) =>
         new MeasurementData(
@@ -92,8 +92,8 @@ class ApiService {
 
   // Fetch the number of water layers and store it
   async getSpringLayerCount() {
-    const rawData = await this.getRequest("measurements/spring-layers");
-    if (typeof rawData.layers === "number" && rawData.layers > 0) {
+    const rawData = await this.getRequest('measurements/spring-layers');
+    if (typeof rawData.layers === 'number' && rawData.layers > 0) {
       this.springLayerData = [rawData.layers]; // Store the count in an array
       // Update spring layers in environmental measurements
       this.environmentData.forEach((measurement) => {
@@ -101,7 +101,7 @@ class ApiService {
       });
       return this.springLayerData;
     }
-    throw new Error("Invalid spring layer data format");
+    throw new Error('Invalid spring layer data format');
   }
 
   // Get environmental data
@@ -116,17 +116,17 @@ class ApiService {
 
   // Fetch analysis data
   async getAnalysis() {
-    return await this.getRequest("analysis");
+    return await this.getRequest('analysis');
   }
 
   // Send a specific submarine selection
   async sendSubSelection(id) {
-    await this.postRequest("submarines/select", { id });
+    await this.postRequest('submarines/select', { id });
   }
 
   // Start the analysis process
   async sendStartAnalysis() {
-    await this.postRequest("analysis/start");
+    await this.postRequest('analysis/start');
   }
 }
 
@@ -134,13 +134,13 @@ export default ApiService;
 
 // Example usage
 (async () => {
-  const apiService = new ApiService("http://192.168.0.1:8080/api");
+  const apiService = new ApiService('http://192.168.0.1:8080/api');
 
   try {
     // Fetch environmental measurements
     const environmentalMeasurements =
       await apiService.getEnvironmentalMeasurements();
-    console.log("Environmental Measurements:");
+    console.log('Environmental Measurements:');
     environmentalMeasurements.forEach((measurement) => {
       console.log(`
               Temperature: ${measurement.getTemperature()} °C
@@ -158,12 +158,12 @@ export default ApiService;
 
     // Get all environmental data
     const allEnvironmentalData = apiService.getEnvironmentalData();
-    console.log("All Environmental Data:", allEnvironmentalData);
+    console.log('All Environmental Data:', allEnvironmentalData);
 
     // Get all spring layer data
     const allSpringLayerData = apiService.getSpringLayerData();
-    console.log("All Spring Layer Data:", allSpringLayerData);
+    console.log('All Spring Layer Data:', allSpringLayerData);
   } catch (error) {
-    console.error("An error occurred:", error.message);
+    console.error('An error occurred:', error.message);
   }
 })();
