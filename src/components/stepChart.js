@@ -1,13 +1,13 @@
 import React from "react";
 import {
-    CartesianGrid,
-    Legend,
-    Line,
-    LineChart,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
 
 function StepChart({ data, xKey, yKey, yLabel, xLabel, title }) {
@@ -26,7 +26,7 @@ function StepChart({ data, xKey, yKey, yLabel, xLabel, title }) {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
-            label={{ value: xLabel, position: "insideRight", offset: -30 }} // Added offset for X-axis label
+            label={{ value: xLabel, position: "bottom", offset: -10 }}
             dataKey={xKey}
           />
           <YAxis
@@ -34,9 +34,9 @@ function StepChart({ data, xKey, yKey, yLabel, xLabel, title }) {
               value: yLabel,
               angle: -90,
               position: "insideLeft",
-              offset: 20, // Increased offset for Y-axis label to prevent overlap
+              offset: 20,
             }}
-            ticks={[5, 4, 2, 1, 0]}
+            ticks={[5, 4, 3, 2, 1, 0]}
             domain={[5, 0]}
             reversed={true}
           />
