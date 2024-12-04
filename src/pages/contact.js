@@ -140,8 +140,8 @@ const Contact = () => {
             <label htmlFor="subject" className="label">
               Subject
             </label>
-            <select name="subject" id="subject" required className="text-field">
-              <option value="" disabled selected>
+            <select name="subject" id="subject" required className="text-field" defaultValue="">
+              <option value="" disabled>
                 Select an error code{" "}
               </option>
               <option value="error-400">Error 400 - Bad Request</option>
