@@ -138,6 +138,17 @@ const Lake3DContourPlot = (props) => {
 
   return (
     <section id="mockdata" className="section">
+      <button
+        onClick={() => {
+          fetch('http://192.168.0.1:8080/get').catch((err) =>
+            console.error('fail:', err)
+          );
+        }}
+      >
+        TEST WEBSOCKETS
+      </button>
+      <br />
+      <label id="wsupdate">hejff</label>
       <h1>{status && status}</h1>
       <div className="container">
         <h2 className="headline-2 mb-12 lg:mb-0">MockData</h2>

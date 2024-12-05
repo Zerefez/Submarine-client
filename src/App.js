@@ -31,11 +31,11 @@ function App() {
       setStatus('CLOSED');
     }
 
-    ws.onopen = () => console.log('WebSocket connected');
-    ws.onclose = () => console.log('WebSocket disconnected');
-    setSocket(ws);
+    ws.addEventListener('message', function (message) {
+      document.getElementById('wsupdate').innerHTML = message.data;
+    });
 
-    return () => ws.close();
+    setSocket(ws);
   }, []);
 
   return (
