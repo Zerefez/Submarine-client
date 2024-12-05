@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Optioncard from "./optioncard";
 import LinearWithValueLabel from "./progressbar";
 
@@ -8,55 +8,71 @@ const Option = () => {
       icon: "not_started",
       label: "Test spring layers",
       desc: "Start measuring the spring layers",
-      onStartTest: (depth) => {
-        handleStartTest(0, depth);
-      },
       requiresDepth: true,
     },
     {
       icon: "not_started",
       label: "Collect water sample",
       desc: "Start collecting water sample",
-      onStartTest: () => {
-        handleStartTest(1); // Second test
-      },
+      requiresDepth: true,
     },
   ];
 
   const [progress, setProgress] = useState(Array(optionItems.length).fill(0));
   const [isRunning, setIsRunning] = useState(Array(optionItems.length).fill(false));
-  const [depth, setDepth] = useState(""); // Track the depth for water levels test
-  const [isDepthValid, setIsDepthValid] = useState(true); // Check if depth is valid
-  const [errorMessage, setErrorMessage] = useState(""); // Error message for invalid depth
-  const [defaultMessage, setDefaultMessage] = useState(""); // Default message for depth
+  const [depth, setDepth] = useState(Array(optionItems.length).fill("")); // Depth for each option
+  const [isDepthValid, setIsDepthValid] = useState(Array(optionItems.length).fill(true)); // Validity for each option
+  const [errorMessage, setErrorMessage] = useState(Array(optionItems.length).fill("")); // Error for each option
+  const [defaultMessage, setDefaultMessage] = useState(Array(optionItems.length).fill("")); // Default message for each option
 
-  useEffect(() => {
-    // Reset progress when the page is refreshed
-    setProgress(Array(optionItems.length).fill(0));
-    setIsRunning(Array(optionItems.length).fill(false));
-  }, [optionItems.length]);
+  const handleStartTest = (index) => {
+    if (isRunning[index]) return; // Prevent running again if already running
 
-  const handleStartTest = (index, inputDepth) => {
-    if (isRunning[index]) return; // Prevent from running again if already running
-
-    // If the depth is required but empty, set it to 500 by default
-    if (index === 0 && !inputDepth) {
-      setDepth("500");
-      setDefaultMessage("No input, 500 cm set as default");
-      inputDepth = "500"; // Set inputDepth to 500 if no input is provided
+    // Validate depth for the specific test option
+    let inputDepth = depth[index];
+    if (!inputDepth || inputDepth < 0 || inputDepth > 500) {
+      if (!inputDepth) {
+        // Set default depth if input is empty
+        setDepth((prev) =>
+          prev.map((d, i) => (i === index ? "500" : d))
+        );
+        setDefaultMessage((prev) =>
+          prev.map((msg, i) => (i === index ? "No input, 500 cm set as default" : msg))
+        );
+        inputDepth = "500";
+      } else {
+        setIsDepthValid((prev) =>
+          prev.map((valid, i) => (i === index ? false : valid))
+        );
+        setErrorMessage((prev) =>
+          prev.map((msg, i) => (i === index ? "Depth must be between 0 and 500." : msg))
+        );
+        return; // Prevent starting test with invalid depth
+      }
+    } else {
+      setIsDepthValid((prev) =>
+        prev.map((valid, i) => (i === index ? true : valid))
+      );
+      setErrorMessage((prev) =>
+        prev.map((msg, i) => (i === index ? "" : msg))
+      );
+      setDefaultMessage((prev) =>
+        prev.map((msg, i) => (i === index ? "" : msg))
+      );
     }
 
-    setIsRunning((prevIsRunning) =>
-      prevIsRunning.map((running, i) => (i === index ? true : running))
+    // Start the test
+    setIsRunning((prev) =>
+      prev.map((running, i) => (i === index ? true : running))
     );
 
-    setProgress((prevProgress) =>
-      prevProgress.map((prog, i) => (i === index ? 0 : prog))
+    setProgress((prev) =>
+      prev.map((prog, i) => (i === index ? 0 : prog))
     );
 
     const timer = setInterval(() => {
-      setProgress((prevProgress) =>
-        prevProgress.map((prog, i) => {
+      setProgress((prev) =>
+        prev.map((prog, i) => {
           if (i === index) {
             const newProgress = prog + 10;
             return newProgress >= 100 ? 100 : newProgress; // Stop at 100%
@@ -68,23 +84,30 @@ const Option = () => {
 
     setTimeout(() => {
       clearInterval(timer);
-      setIsRunning((prevIsRunning) =>
-        prevIsRunning.map((running, i) => (i === index ? false : running)) // Set the test as not running
+      setIsRunning((prev) =>
+        prev.map((running, i) => (i === index ? false : running))
       );
     }, 8000); // Stop after 8 seconds
   };
 
-  const handleDepthChange = (e) => {
-    const value = e.target.value;
-    setDepth(value);
+  const handleDepthChange = (index, value) => {
+    setDepth((prev) => prev.map((d, i) => (i === index ? value : d)));
 
-    // Validate the depth input (positive number and within 0-500)
+    // Validate the depth input for the specific option
     if (value < 0 || value > 500) {
-      setIsDepthValid(false);
-      setErrorMessage("Depth must be between 0 and 500.");
+      setIsDepthValid((prev) =>
+        prev.map((valid, i) => (i === index ? false : valid))
+      );
+      setErrorMessage((prev) =>
+        prev.map((msg, i) => (i === index ? "Depth must be between 0 and 500." : msg))
+      );
     } else {
-      setIsDepthValid(true);
-      setErrorMessage("");
+      setIsDepthValid((prev) =>
+        prev.map((valid, i) => (i === index ? true : valid))
+      );
+      setErrorMessage((prev) =>
+        prev.map((msg, i) => (i === index ? "" : msg))
+      );
     }
   };
 
@@ -96,32 +119,32 @@ const Option = () => {
           Using the options below, you can start testing.
         </p>
         <div className="grid grid-cols-[repeat(auto-fill,_minmax(250,_1fr))] gap-3">
-          {optionItems.map(
-            ({ icon, label, desc, onStartTest, requiresDepth }, index) => (
-              <div key={index}>
-                <Optioncard
-                  icon={icon}
-                  label={label}
-                  desc={desc}
-                  onStartTest={requiresDepth ? () => onStartTest(depth) : onStartTest}
-                  requiresDepth={requiresDepth}
-                  depthValue={depth}
-                  onDepthChange={handleDepthChange}
-                  isDepthValid={isDepthValid}
-                  errorMessage={errorMessage}
-                  defaultMessage={defaultMessage}
-                />
-                <div className="block my-3">
-                  <div className="bg-zinc-800/50 p-3 rounded-2xl md:p-3">
-                    <h3 className="text-zinc-300 mb-2">
-                      {label} progress: {progress[index]}%
-                    </h3>
-                    <LinearWithValueLabel value={progress[index]} />
-                  </div>
+          {optionItems.map(({ icon, label, desc, requiresDepth }, index) => (
+            <div key={index}>
+              <Optioncard
+                icon={icon}
+                label={label}
+                desc={desc}
+                onStartTest={() => handleStartTest(index)}
+                requiresDepth={requiresDepth}
+                depthValue={depth[index]}
+                onDepthChange={(e) =>
+                  handleDepthChange(index, e.target.value)
+                }
+                isDepthValid={isDepthValid[index]}
+                errorMessage={errorMessage[index]}
+                defaultMessage={defaultMessage[index]}
+              />
+              <div className="block my-3">
+                <div className="bg-zinc-800/50 p-3 rounded-2xl md:p-3">
+                  <h3 className="text-zinc-300 mb-2">
+                    {label} progress: {progress[index]}%
+                  </h3>
+                  <LinearWithValueLabel value={progress[index]} />
                 </div>
               </div>
-            )
-          )}
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -129,3 +152,4 @@ const Option = () => {
 };
 
 export default Option;
+
