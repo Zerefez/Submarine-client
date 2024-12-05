@@ -66,13 +66,13 @@ const Lake3DContourPlot = (props) => {
 
   useEffect(() => {
     if (chartData.length > 0) {
-      const z = chartData.map((data) => data.temperature + 0.1 * data.oxygen);
+      const z = chartData.map((data) => data.oxygen);
       const y = chartData.map((data) => data.depth);
-      const x = chartData.map((_, i) => i);
+      const x = chartData.map((data) => data.temperature);
 
       const data = [
         {
-          z: [z],
+          z,
           y,
           x,
           type: 'contour',
@@ -85,7 +85,7 @@ const Lake3DContourPlot = (props) => {
             showlines: false,
           },
           colorbar: {
-            title: 'Temperature + Oxygen Effect',
+            title: ' Oxygen (mg/L)',
             tickfont: { color: '#D1D5DB' },
             titlefont: { color: '#D1D5DB' },
           },
@@ -99,7 +99,7 @@ const Lake3DContourPlot = (props) => {
         },
         xaxis: {
           title: {
-            text: 'Horizontal Distance',
+            text: 'Temperature (°C)',
             font: { color: '#D1D5DB' },
           },
           tickfont: { color: '#D1D5DB' },
@@ -162,9 +162,9 @@ const Lake3DContourPlot = (props) => {
             data={depthOverTime}
             xKey="time"
             yKey="depth"
-            xLabel="Time(min)"
+            xLabel="Measurement"
             yLabel="Depth (m)"
-            title="Depth Over Time"
+            title="Depth Over Each measurement"
           />
         </div>
       </div>
