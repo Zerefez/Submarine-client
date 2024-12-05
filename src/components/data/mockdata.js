@@ -16,15 +16,16 @@ const Lake3DContourPlot = (props) => {
         console.log('Message received from server:', event.data);
         try {
           const rawData = JSON.parse(event.data);
-      
+
+          console.log('RAWDATA,', rawData);
           if (rawData.sensors) {
             // Process raw data from sensors array
             const processedData = rawData.sensors.map((sensor) => ({
               temperature: sensor.temperatur, // Map 'temperatur' to 'temperature'
-              depth: sensor.dybde,           // Map 'dybde' to 'depth'
-              oxygen: sensor.oxygen,         // Keep 'oxygen' as is
+              depth: sensor.dybde, // Map 'dybde' to 'depth'
+              oxygen: sensor.oxygen, // Keep 'oxygen' as is
             }));
-      
+
             // Validate the data
             const validData = processedData.filter(
               (data) =>
@@ -32,19 +33,23 @@ const Lake3DContourPlot = (props) => {
                 typeof data.depth === 'number' &&
                 typeof data.oxygen === 'number'
             );
-      
+
+            console.log('VALIDATA', validData);
+
             // Update chartData and depthOverTime
             const flatData = validData.map((data) => ({
               depth: data.depth,
               temperature: data.temperature,
               oxygen: data.oxygen,
             }));
-      
+
+            console.log('FLAT DATA', flatData);
+
             const depthTimeData = validData.map((data, i) => ({
               time: i, // Assuming sequential data points
               depth: data.depth,
             }));
-      
+
             setChartData(flatData);
             setDepthOverTime(depthTimeData);
             setSocketMessages((prevMessages) => [...prevMessages, event.data]);
@@ -70,9 +75,13 @@ const Lake3DContourPlot = (props) => {
       const y = chartData.map((data) => data.depth);
       const x = chartData.map((_, i) => i);
 
+      console.log('x', x);
+      console.log('y', y);
+      console.log('z', z);
+
       const data = [
         {
-          z: [z],
+          z,
           y,
           x,
           type: 'contour',
@@ -160,7 +169,7 @@ const Lake3DContourPlot = (props) => {
           />
           <StepChart
             data={depthOverTime}
-            xKey="time"
+            // xKey="time"
             yKey="depth"
             xLabel="Time(min)"
             yLabel="Depth (m)"
