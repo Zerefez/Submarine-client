@@ -2,6 +2,7 @@ import Plotly from 'plotly.js-dist';
 import React, { useEffect, useState } from 'react';
 import Areachart from '../areaChart';
 import StepChart from '../stepChart';
+import MeasurementData from './measurementData'; // Import the MeasurementData class
 
 const Lake3DContourPlot = (props) => {
   const { socket, status } = props;
@@ -17,36 +18,30 @@ const Lake3DContourPlot = (props) => {
         try {
           const rawData = JSON.parse(event.data);
 
-          console.log('RAWDATA,', rawData);
           if (rawData.sensors) {
-            // Process raw data from sensors array
-            const processedData = rawData.sensors.map((sensor) => ({
-              temperature: sensor.temperatur, // Map 'temperatur' to 'temperature'
-              depth: sensor.dybde, // Map 'dybde' to 'depth'
-              oxygen: sensor.oxygen, // Keep 'oxygen' as is
-            }));
+            const processedMeasurements = rawData.sensors.map((sensor) => {
+              const measurement = new MeasurementData(
+                sensor.temperatur, // Temperature
+                sensor.oxygen,    // Oxygen
+                null,             // Pressure (not available in raw data)
+                null              // Spring layers (not available in raw data)
+              );
+              return measurement.verifyData() ? measurement : null;
+            }).filter((measurement) => measurement !== null);
 
-            // Validate the data
-            const validData = processedData.filter(
-              (data) =>
-                typeof data.temperature === 'number' &&
-                typeof data.depth === 'number' &&
-                typeof data.oxygen === 'number'
-            );
-
-            console.log('VALIDATA', validData);
+            console.log('Processed Measurements:', processedMeasurements);
 
             // Update chartData and depthOverTime
-            const flatData = validData.map((data) => ({
-              depth: data.depth,
-              temperature: data.temperature,
-              oxygen: data.oxygen,
+            const flatData = processedMeasurements.map((measurement) => ({
+              depth: rawData.sensors.find(
+                (sensor) => sensor.temperatur === measurement.getTemperature()
+              ).dybde,
+              temperature: measurement.getTemperature(),
+              oxygen: measurement.getOxygen(),
             }));
 
-            console.log('FLAT DATA', flatData);
-
-            const depthTimeData = validData.map((data, i) => ({
-              time: i, // Assuming sequential data points
+            const depthTimeData = flatData.map((data, index) => ({
+              time: index,
               depth: data.depth,
             }));
 
@@ -71,61 +66,63 @@ const Lake3DContourPlot = (props) => {
 
   useEffect(() => {
     if (chartData.length > 0) {
-      const z = chartData.map((data) => data.oxygen);
-      const y = chartData.map((data) => data.depth);
-      const x = chartData.map((data) => data.temperature);
+      const lakeDiv = document.getElementById('lakeDiv');
 
-      console.log('x', x);
-      console.log('y', y);
-      console.log('z', z);
+      if (lakeDiv) {
+        const z = chartData.map((data) => data.oxygen);
+        const y = chartData.map((data) => data.depth);
+        const x = chartData.map((data) => data.temperature);
 
-      const data = [
-        {
-          z,
-          y,
-          x,
-          type: 'contour',
-          colorscale: [
-            [0, 'rgb(0,0,255)'],
-            [1, 'rgb(255,0,0)'],
-          ],
-          contours: {
-            coloring: 'heatmap',
-            showlines: false,
+        const data = [
+          {
+            z,
+            y,
+            x,
+            type: 'contour',
+            colorscale: [
+              [0, 'rgb(0,0,255)'],
+              [1, 'rgb(255,0,0)'],
+            ],
+            contours: {
+              coloring: 'heatmap',
+              showlines: false,
+            },
+            colorbar: {
+              title: 'Oxygen (mg/L)',
+              tickfont: { color: '#D1D5DB' },
+              titlefont: { color: '#D1D5DB' },
+            },
           },
-          colorbar: {
-            title: ' Oxygen (mg/L)',
+        ];
+
+        const layout = {
+          title: {
+            text: '3D Lake Contour Plot',
+            font: { color: '#D1D5DB' },
+          },
+          xaxis: {
+            title: {
+              text: 'Temperature (°C)',
+              font: { color: '#D1D5DB' },
+            },
             tickfont: { color: '#D1D5DB' },
-            titlefont: { color: '#D1D5DB' },
           },
-        },
-      ];
+          yaxis: {
+            title: {
+              text: 'Depth (m)',
+              font: { color: '#D1D5DB' },
+            },
+            tickfont: { color: '#D1D5DB' },
+            autorange: 'reversed',
+          },
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          plot_bgcolor: 'rgba(0,0,0,0)',
+        };
 
-      const layout = {
-        title: {
-          text: '3D Lake Contour Plot',
-          font: { color: '#D1D5DB' },
-        },
-        xaxis: {
-          title: {
-            text: 'Temperature (°C)',
-            font: { color: '#D1D5DB' },
-          },
-          tickfont: { color: '#D1D5DB' },
-        },
-        yaxis: {
-          title: {
-            text: 'Depth (m)',
-            font: { color: '#D1D5DB' },
-          },
-          tickfont: { color: '#D1D5DB' },
-          autorange: 'reversed',
-        },
-        paper_bgcolor: 'rgba(0,0,0,0)',
-        plot_bgcolor: 'rgba(0,0,0,0)',
-      };
-
-      Plotly.newPlot('lakeDiv', data, layout);
+        Plotly.newPlot(lakeDiv, data, layout);
+      } else {
+        console.warn('lakeDiv element not found');
+      }
     }
   }, [chartData]);
 
@@ -134,14 +131,14 @@ const Lake3DContourPlot = (props) => {
       <button
         onClick={() => {
           fetch('http://192.168.0.1:8080/get').catch((err) =>
-            console.error('fail:', err)
+            console.error('Fail to fetch:', err)
           );
         }}
       >
         TEST WEBSOCKETS
       </button>
       <br />
-      <label id="wsupdate">hejff</label>
+      <label id="wsupdate">WebSocket Status</label>
       <h1>{status && status}</h1>
       <div className="container">
         <h2 className="headline-2 mb-12 lg:mb-0">Lake Data</h2>
@@ -169,11 +166,10 @@ const Lake3DContourPlot = (props) => {
           />
           <StepChart
             data={depthOverTime}
-            // xKey="time"
             yKey="depth"
             xLabel="Measurement"
             yLabel="Depth (m)"
-            title="Depth Over Each measurement"
+            title="Depth Over Each Measurement"
           />
         </div>
       </div>

@@ -1,5 +1,5 @@
 class MeasurementData {
-    constructor(temp, oxygen, pressure, springLayers, timestamp = new Date()) {
+    constructor(temp, oxygen, pressure = null, springLayers = null, timestamp = new Date()) {
         this.temperature = temp;
         this.oxygen = oxygen;
         this.pressure = pressure;
@@ -27,15 +27,12 @@ class MeasurementData {
         return this.springLayers;
     }
 
-    // Verify if the environmental data and spring layer count are valid
+    // Verify if the environmental data is valid
     verifyData() {
         return (
             // Check environmental data ranges
             this.temperature >= -50 && this.temperature <= 100 && // Temp range
-            this.oxygen >= 0 && this.oxygen <= 100 &&              // Oxygen range
-            this.pressure >= 0 && this.pressure <= 2000 &&         // Pressure range
-            // Check spring layer validity
-            Number.isInteger(this.springLayers) && this.springLayers > 0
+            this.oxygen >= 0 && this.oxygen <= 10000 // Oxygen range
         );
     }
 }
