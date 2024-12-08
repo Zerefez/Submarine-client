@@ -58,12 +58,12 @@ const Navbar = ({ navOpen }) => {
       ref: null,
     },
 
-    {
+    /*{
       label: "Mockdata",
       link: "#mockdata",
       className: "nav-link",
       ref: null,
-    },
+    },*/
 
     {
       label: "Data",

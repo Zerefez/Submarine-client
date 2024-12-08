@@ -127,7 +127,7 @@ const Lake3DContourPlot = (props) => {
   }, [chartData]);
 
   return (
-    <section id="mockdata" className="section">
+    <section id="data" className="section">
       <button
         onClick={() => {
           fetch('http://192.168.0.1:8080/get').catch((err) =>

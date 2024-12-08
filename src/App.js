@@ -1,10 +1,11 @@
-import Mockdata from './components/data/mockdata';
+import Data from './components/data/displayData';
 import Options from './components/options';
 import Submarines from './components/submarines';
 import About from './pages/about';
 import Contact from './pages/contact';
 import Footer from './pages/footer';
 import Header from './pages/header';
+
 
 import { useEffect, useState } from 'react';
 
@@ -45,7 +46,7 @@ function App() {
         <Submarines />
         <About />
         <Options />
-        <Mockdata socket={socket} status={status} />
+        <Data socket={socket} status={status} />
         <Contact />
       </main>
       <Footer />
