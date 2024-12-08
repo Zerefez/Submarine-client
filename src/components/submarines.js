@@ -5,6 +5,17 @@ import { ButtonOutline, ButtonPrimary } from './button';
 
 const Submarines = () => {
   const [data, setData] = useState(null); // State to hold the response data
+  const [submarines, setSubmarines] = useState([
+    { available: false, value: '1', label: 'Zerefez' },
+    { available: false, value: '2', label: 'KHALed' },
+    { available: false, value: '3', label: 'Muhandizi' },
+    { available: false, value: '4', label: 'shah rukh khanizzi' },
+    { available: false, value: '5', label: 'AHmadizzi Uchiha' },
+    { available: false, value: '6', label: 'DAnielizzi' },
+    { available: false, value: '7', label: 'ERMRZZI' },
+    { available: false, value: '8', label: 'CHrisizzi' },
+    { available: false, value: '9', label: 'ALIZZI' },
+  ]);
 
   useEffect(() => {
     async function testFetch() {
@@ -43,19 +54,8 @@ const Submarines = () => {
               label="Select submarine"
               icon=""
               isDropdown={true}
-              availableOptions={[
-                { value: '1', label: 'Zerefez' },
-                { value: '2', label: 'KHALed' },
-                { value: '3', label: 'Muhandizi' },
-                { value: '4', label: 'shah rukh khanizzi' },
-              ]}
-              unavailableOptions={[
-                { value: '5', label: 'AHmadizzi Uchiha' },
-                { value: '6', label: 'DAnielizzi' },
-                { value: '7', label: 'ERMRZZI' },
-                { value: '8', label: 'CHrisizzi' },
-                { value: '9', label: 'ALIZZI' },
-              ]}
+              availableOptions={submarines.filter((sub) => sub.available)}
+              unavailableOptions={submarines.filter((sub) => !sub.available)}
             />
             <ButtonOutline
               href="#about"

@@ -18,16 +18,18 @@ const Lake3DContourPlot = (props) => {
         try {
           const rawData = JSON.parse(event.data);
 
-          if (rawData.sensors) {
-            const processedMeasurements = rawData.sensors.map((sensor) => {
-              const measurement = new MeasurementData(
-                sensor.temperatur, // Temperature
-                sensor.oxygen,    // Oxygen
-                null,             // Pressure (not available in raw data)
-                null              // Spring layers (not available in raw data)
-              );
-              return measurement.verifyData() ? measurement : null;
-            }).filter((measurement) => measurement !== null);
+          if (!rawData.type) {
+            const processedMeasurements = rawData
+              .map((sensor) => {
+                const measurement = new MeasurementData(
+                  sensor.temperatur, // Temperature
+                  sensor.oxygen, // Oxygen
+                  null, // Pressure (not available in raw data)
+                  null // Spring layers (not available in raw data)
+                );
+                return measurement.verifyData() ? measurement : null;
+              })
+              .filter((measurement) => measurement !== null);
 
             console.log('Processed Measurements:', processedMeasurements);
 
@@ -128,18 +130,6 @@ const Lake3DContourPlot = (props) => {
 
   return (
     <section id="data" className="section">
-      <button
-        onClick={() => {
-          fetch('http://192.168.0.1:8080/get').catch((err) =>
-            console.error('Fail to fetch:', err)
-          );
-        }}
-      >
-        TEST WEBSOCKETS
-      </button>
-      <br />
-      <label id="wsupdate">WebSocket Status</label>
-      <h1>{status && status}</h1>
       <div className="container">
         <h2 className="headline-2 mb-12 lg:mb-0">Lake Data</h2>
         <div
