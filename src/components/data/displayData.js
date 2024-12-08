@@ -5,7 +5,7 @@ import StepChart from '../stepChart';
 import MeasurementData from './measurementData'; // Import the MeasurementData class
 
 const Lake3DContourPlot = (props) => {
-  const { socket, status } = props;
+  const { socket } = props;
 
   const [chartData, setChartData] = useState([]);
   const [depthOverTime, setDepthOverTime] = useState([]);

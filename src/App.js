@@ -6,12 +6,22 @@ import Contact from './pages/contact';
 import Footer from './pages/footer';
 import Header from './pages/header';
 
-
 import { useEffect, useState } from 'react';
 
 function App() {
   const [socket, setSocket] = useState(null);
   const [status, setStatus] = useState(''); // Track WebSocket status
+  const [submarines, setSubmarines] = useState([
+    { available: true, value: '1', label: 'Zerefez' },
+    { available: false, value: '2', label: 'KHALed' },
+    { available: false, value: '3', label: 'Muhandizi' },
+    { available: false, value: '4', label: 'Shah Rukh Khanizzi' },
+    { available: false, value: '5', label: 'Ahmadizzi Uchiha' },
+    { available: false, value: '6', label: 'Danielizzi' },
+    { available: false, value: '7', label: 'ERMRZZI' },
+    { available: false, value: '8', label: 'Chrisizzi' },
+    { available: false, value: '9', label: 'ALIZZI' },
+  ]);
 
   useEffect(() => {
     const ws = new WebSocket('ws://192.168.0.1:8080/live');
@@ -43,9 +53,17 @@ function App() {
     <>
       <Header />
       <main>
-        <Submarines />
+        <Submarines
+          socket={socket}
+          submarines={submarines}
+          setSubmarines={setSubmarines}
+        />
         <About />
-        <Options />
+        <Options
+          socket={socket}
+          submarines={submarines}
+          setSubmarines={setSubmarines}
+        />
         <Data socket={socket} status={status} />
         <Contact />
       </main>

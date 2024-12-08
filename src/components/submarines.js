@@ -1,37 +1,47 @@
-import React, { useEffect, useState } from "react";
-import { fetchData } from "../apiService";
-import { ButtonOutline, ButtonPrimary } from "./button";
-import Option from "./options";
+import React, { useEffect, useState } from 'react';
+import { ButtonOutline, ButtonPrimary } from './button';
+import Option from './options';
 
-const Submarines = () => {
+const Submarines = (props) => {
+  const { socket, submarines, setSubmarines } = props;
+
   const [data, setData] = useState(null); // State to hold the response data
-  const [submarines, setSubmarines] = useState([
-    { available: false, value: "1", label: "Zerefez" },
-    { available: false, value: "2", label: "KHALed" },
-    { available: false, value: "3", label: "Muhandizi" },
-    { available: false, value: "4", label: "Shah Rukh Khanizzi" },
-    { available: false, value: "5", label: "Ahmadizzi Uchiha" },
-    { available: false, value: "6", label: "Danielizzi" },
-    { available: false, value: "7", label: "ERMRZZI" },
-    { available: false, value: "8", label: "Chrisizzi" },
-    { available: false, value: "9", label: "ALIZZI" },
-  ]);
 
   useEffect(() => {
-    async function fetchDataAndSetSubmarines() {
-      const result = await fetchData();
-      setData(result);
+    //const result = await fetchData();
+    //setData(result);
 
-      // Simulate available submarines from fetched data
-      const updatedSubmarines = submarines.map((sub, index) => ({
-        ...sub,
-        available: index % 2 === 0, // Example: Alternate submarines are available
-      }));
-      setSubmarines(updatedSubmarines);
+    if (socket) {
+      const handleSocketMessage = (event) => {
+        console.log('Message received from server:', event.data);
+
+        const rawData = JSON.parse(event.data);
+
+        if (rawData.type) {
+          alert(
+            `Status: ${rawData.payload.status}\nDetails: ${rawData.payload.details}`
+          );
+
+          if (rawData.payload.status === 'passed') {
+            setSubmarines((prevSubmarines) =>
+              prevSubmarines.map(
+                (submarine) =>
+                  submarine.label === 'Zerefez'
+                    ? { ...submarine, available: true } // Update only the matching submarine
+                    : submarine // Leave others unchanged
+              )
+            );
+          }
+        }
+      };
+
+      socket.addEventListener('message', handleSocketMessage);
+
+      return () => {
+        socket.removeEventListener('message', handleSocketMessage);
+      };
     }
-
-    fetchDataAndSetSubmarines();
-  }, []);
+  }, [socket, submarines, setSubmarines]);
 
   return (
     <section id="home" className="pt-28 lg:pt-36">
@@ -84,11 +94,6 @@ const Submarines = () => {
           </figure>
         </div>
       </div>
-
-      {/* Pass the submarines to Option */}
-      <Option availableSubmarine={submarines} />
-
-      <p>{data ? data : "ingen data lige nu.."}</p>
     </section>
   );
 };

@@ -1,9 +1,15 @@
-import { useState } from "react";
-import OptionCard from "./optioncard";
-import LinearWithValueLabel from "./progressbar";
+import { useState, useEffect } from 'react';
+import OptionCard from './optioncard';
+import LinearWithValueLabel from './progressbar';
 
-const Option = ({ availableSubmarine }) => {
-  const hasAvailableSubmarine = availableSubmarine.some((sub) => sub.available);
+const Option = (props) => {
+  const { submarines } = props;
+
+  useEffect(() => {
+    console.log('Submarines changed:', submarines);
+    // Perform any side effects you need when submarines change
+  }, [submarines]); //
+
   const optionItems = [
     /*{
       icon: "not_started",
@@ -12,9 +18,9 @@ const Option = ({ availableSubmarine }) => {
       requiresDepth: true,
     },*/
     {
-      icon: "not_started",
-      label: "Collect water measurements",
-      desc: "Start collecting water measurements",
+      icon: 'not_started',
+      label: 'Collect water measurements',
+      desc: 'Start collecting water measurements',
       requiresDepth: true,
     },
   ];
@@ -23,15 +29,15 @@ const Option = ({ availableSubmarine }) => {
   const [isRunning, setIsRunning] = useState(
     Array(optionItems.length).fill(false)
   );
-  const [depth, setDepth] = useState(Array(optionItems.length).fill("")); // Depth for each option
+  const [depth, setDepth] = useState(Array(optionItems.length).fill('')); // Depth for each option
   const [isDepthValid, setIsDepthValid] = useState(
     Array(optionItems.length).fill(true)
   ); // Validity for each option
   const [errorMessage, setErrorMessage] = useState(
-    Array(optionItems.length).fill("")
+    Array(optionItems.length).fill('')
   ); // Error for each option
   const [defaultMessage, setDefaultMessage] = useState(
-    Array(optionItems.length).fill("")
+    Array(optionItems.length).fill('')
   ); // Default message for each option
 
   const handleStartTest = (index) => {
@@ -42,20 +48,20 @@ const Option = ({ availableSubmarine }) => {
     if (!inputDepth || inputDepth < 0 || inputDepth > 500) {
       if (!inputDepth) {
         // Set default depth if input is empty
-        setDepth((prev) => prev.map((d, i) => (i === index ? "500" : d)));
+        setDepth((prev) => prev.map((d, i) => (i === index ? '500' : d)));
         setDefaultMessage((prev) =>
           prev.map((msg, i) =>
-            i === index ? "No input, 500 cm set as default" : msg
+            i === index ? 'No input, 500 cm set as default' : msg
           )
         );
-        inputDepth = "500";
+        inputDepth = '500';
       } else {
         setIsDepthValid((prev) =>
           prev.map((valid, i) => (i === index ? false : valid))
         );
         setErrorMessage((prev) =>
           prev.map((msg, i) =>
-            i === index ? "Depth must be between 0 and 500." : msg
+            i === index ? 'Depth must be between 0 and 500.' : msg
           )
         );
         return; // Prevent starting test with invalid depth
@@ -64,9 +70,9 @@ const Option = ({ availableSubmarine }) => {
       setIsDepthValid((prev) =>
         prev.map((valid, i) => (i === index ? true : valid))
       );
-      setErrorMessage((prev) => prev.map((msg, i) => (i === index ? "" : msg)));
+      setErrorMessage((prev) => prev.map((msg, i) => (i === index ? '' : msg)));
       setDefaultMessage((prev) =>
-        prev.map((msg, i) => (i === index ? "" : msg))
+        prev.map((msg, i) => (i === index ? '' : msg))
       );
     }
 
@@ -107,14 +113,14 @@ const Option = ({ availableSubmarine }) => {
       );
       setErrorMessage((prev) =>
         prev.map((msg, i) =>
-          i === index ? "Depth must be between 0 and 500." : msg
+          i === index ? 'Depth must be between 0 and 500.' : msg
         )
       );
     } else {
       setIsDepthValid((prev) =>
         prev.map((valid, i) => (i === index ? true : valid))
       );
-      setErrorMessage((prev) => prev.map((msg, i) => (i === index ? "" : msg)));
+      setErrorMessage((prev) => prev.map((msg, i) => (i === index ? '' : msg)));
     }
   };
 
@@ -139,7 +145,11 @@ const Option = ({ availableSubmarine }) => {
                 isDepthValid={isDepthValid[index]}
                 errorMessage={errorMessage[index]}
                 defaultMessage={defaultMessage[index]}
-                isDepthDisabled={!hasAvailableSubmarine} // Disable depth input if no submarines are available
+                isDepthDisabled={
+                  submarines &&
+                  !submarines.some((submarine) => submarine.available)
+                } // Disable depth input if no submarines are available
+                submarines={submarines}
               />
               <div className="block my-3">
                 <div className="bg-zinc-800/50 p-3 rounded-2xl md:p-3">

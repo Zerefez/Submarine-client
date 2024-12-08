@@ -1,5 +1,5 @@
-import PropTypes from "prop-types";
-
+import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 const Optioncard = ({
   icon,
   label,
@@ -13,23 +13,27 @@ const Optioncard = ({
   isDepthDisabled,
   errorMessage,
   defaultMessage,
+  submarines,
 }) => {
+  useEffect(() => {
+    console.log('Submarines changed:', submarines);
+    // Perform any side effects you need when submarines change
+  }, [submarines]); //
   return (
     <div
       className={
-        "flex items-center gap-3 ring-2 ring-inset ring-zinc-50/10 rounded-2xl p-3 hover:bg-zinc-800 transition-colors group" +
+        'flex items-center gap-3 ring-2 ring-inset ring-zinc-50/10 rounded-2xl p-3 hover:bg-zinc-800 transition-colors group' +
         classes
       }
     >
       <button
         className="flex items-center justify-center bg-zinc-700/50 rounded-lg overflow-hidden w-12 h-12 p-0 group-hover:bg-zinc-900 transition-colors"
         onClick={onStartTest}
-        disabled={requiresDepth && !isDepthValid}
+        disabled={
+          submarines && !submarines.some((submarine) => submarine.available)
+        }
       >
-        <span
-          className="material-symbols-rounded"
-          style={{ fontSize: "40px" }}
-        >
+        <span className="material-symbols-rounded" style={{ fontSize: '40px' }}>
           {icon}
         </span>
       </button>
@@ -50,7 +54,9 @@ const Optioncard = ({
               <span className="text-red-500 text-sm ml-2">{errorMessage}</span>
             )}
             {defaultMessage && (
-              <span className="text-yellow-500 text-sm ml-2">{defaultMessage}</span>
+              <span className="text-yellow-500 text-sm ml-2">
+                {defaultMessage}
+              </span>
             )}
           </div>
         )}
