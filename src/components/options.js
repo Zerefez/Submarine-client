@@ -4,16 +4,16 @@ import LinearWithValueLabel from "./progressbar";
 
 const Option = () => {
   const optionItems = [
-    {
+    /*{
       icon: "not_started",
       label: "Test spring layers",
       desc: "Start measuring the spring layers",
       requiresDepth: true,
-    },
+    },*/
     {
       icon: "not_started",
-      label: "Collect water sample",
-      desc: "Start collecting water sample",
+      label: "Collect water measurements",
+      desc: "Start collecting water measurements",
       requiresDepth: true,
     },
   ];
