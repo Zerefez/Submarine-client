@@ -10,6 +10,7 @@ const Optioncard = ({
   depthValue,
   onDepthChange,
   isDepthValid,
+  isDepthDisabled,
   errorMessage,
   defaultMessage,
 }) => {
@@ -43,6 +44,7 @@ const Optioncard = ({
               placeholder="Enter Depth in cm (e.g. 100)"
               value={depthValue}
               onChange={onDepthChange}
+              disabled={isDepthDisabled}
             />
             {!isDepthValid && (
               <span className="text-red-500 text-sm ml-2">{errorMessage}</span>
@@ -67,6 +69,7 @@ Optioncard.propTypes = {
   depthValue: PropTypes.string,
   onDepthChange: PropTypes.func,
   isDepthValid: PropTypes.bool,
+  isDepthDisabled: PropTypes.bool,
   errorMessage: PropTypes.string,
   defaultMessage: PropTypes.string,
 };

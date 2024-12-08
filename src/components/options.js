@@ -1,8 +1,9 @@
 import { useState } from "react";
-import Optioncard from "./optioncard";
+import OptionCard from "./optioncard";
 import LinearWithValueLabel from "./progressbar";
 
-const Option = () => {
+const Option = ({ availableSubmarine }) => {
+  const hasAvailableSubmarine = availableSubmarine.some((sub) => sub.available);
   const optionItems = [
     /*{
       icon: "not_started",
@@ -19,11 +20,19 @@ const Option = () => {
   ];
 
   const [progress, setProgress] = useState(Array(optionItems.length).fill(0));
-  const [isRunning, setIsRunning] = useState(Array(optionItems.length).fill(false));
+  const [isRunning, setIsRunning] = useState(
+    Array(optionItems.length).fill(false)
+  );
   const [depth, setDepth] = useState(Array(optionItems.length).fill("")); // Depth for each option
-  const [isDepthValid, setIsDepthValid] = useState(Array(optionItems.length).fill(true)); // Validity for each option
-  const [errorMessage, setErrorMessage] = useState(Array(optionItems.length).fill("")); // Error for each option
-  const [defaultMessage, setDefaultMessage] = useState(Array(optionItems.length).fill("")); // Default message for each option
+  const [isDepthValid, setIsDepthValid] = useState(
+    Array(optionItems.length).fill(true)
+  ); // Validity for each option
+  const [errorMessage, setErrorMessage] = useState(
+    Array(optionItems.length).fill("")
+  ); // Error for each option
+  const [defaultMessage, setDefaultMessage] = useState(
+    Array(optionItems.length).fill("")
+  ); // Default message for each option
 
   const handleStartTest = (index) => {
     if (isRunning[index]) return; // Prevent running again if already running
@@ -33,11 +42,11 @@ const Option = () => {
     if (!inputDepth || inputDepth < 0 || inputDepth > 500) {
       if (!inputDepth) {
         // Set default depth if input is empty
-        setDepth((prev) =>
-          prev.map((d, i) => (i === index ? "500" : d))
-        );
+        setDepth((prev) => prev.map((d, i) => (i === index ? "500" : d)));
         setDefaultMessage((prev) =>
-          prev.map((msg, i) => (i === index ? "No input, 500 cm set as default" : msg))
+          prev.map((msg, i) =>
+            i === index ? "No input, 500 cm set as default" : msg
+          )
         );
         inputDepth = "500";
       } else {
@@ -45,7 +54,9 @@ const Option = () => {
           prev.map((valid, i) => (i === index ? false : valid))
         );
         setErrorMessage((prev) =>
-          prev.map((msg, i) => (i === index ? "Depth must be between 0 and 500." : msg))
+          prev.map((msg, i) =>
+            i === index ? "Depth must be between 0 and 500." : msg
+          )
         );
         return; // Prevent starting test with invalid depth
       }
@@ -53,9 +64,7 @@ const Option = () => {
       setIsDepthValid((prev) =>
         prev.map((valid, i) => (i === index ? true : valid))
       );
-      setErrorMessage((prev) =>
-        prev.map((msg, i) => (i === index ? "" : msg))
-      );
+      setErrorMessage((prev) => prev.map((msg, i) => (i === index ? "" : msg)));
       setDefaultMessage((prev) =>
         prev.map((msg, i) => (i === index ? "" : msg))
       );
@@ -66,9 +75,7 @@ const Option = () => {
       prev.map((running, i) => (i === index ? true : running))
     );
 
-    setProgress((prev) =>
-      prev.map((prog, i) => (i === index ? 0 : prog))
-    );
+    setProgress((prev) => prev.map((prog, i) => (i === index ? 0 : prog)));
 
     const timer = setInterval(() => {
       setProgress((prev) =>
@@ -99,15 +106,15 @@ const Option = () => {
         prev.map((valid, i) => (i === index ? false : valid))
       );
       setErrorMessage((prev) =>
-        prev.map((msg, i) => (i === index ? "Depth must be between 0 and 500." : msg))
+        prev.map((msg, i) =>
+          i === index ? "Depth must be between 0 and 500." : msg
+        )
       );
     } else {
       setIsDepthValid((prev) =>
         prev.map((valid, i) => (i === index ? true : valid))
       );
-      setErrorMessage((prev) =>
-        prev.map((msg, i) => (i === index ? "" : msg))
-      );
+      setErrorMessage((prev) => prev.map((msg, i) => (i === index ? "" : msg)));
     }
   };
 
@@ -121,19 +128,18 @@ const Option = () => {
         <div className="grid grid-cols-[repeat(auto-fill,_minmax(250,_1fr))] gap-3">
           {optionItems.map(({ icon, label, desc, requiresDepth }, index) => (
             <div key={index}>
-              <Optioncard
+              <OptionCard
                 icon={icon}
                 label={label}
                 desc={desc}
                 onStartTest={() => handleStartTest(index)}
                 requiresDepth={requiresDepth}
                 depthValue={depth[index]}
-                onDepthChange={(e) =>
-                  handleDepthChange(index, e.target.value)
-                }
+                onDepthChange={(e) => handleDepthChange(index, e.target.value)}
                 isDepthValid={isDepthValid[index]}
                 errorMessage={errorMessage[index]}
                 defaultMessage={defaultMessage[index]}
+                isDepthDisabled={!hasAvailableSubmarine} // Disable depth input if no submarines are available
               />
               <div className="block my-3">
                 <div className="bg-zinc-800/50 p-3 rounded-2xl md:p-3">
@@ -152,4 +158,3 @@ const Option = () => {
 };
 
 export default Option;
-

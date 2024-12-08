@@ -1,30 +1,38 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
-import { fetchData } from '../apiService';
-import { ButtonOutline, ButtonPrimary } from './button';
+import React, { useEffect, useState } from "react";
+import { fetchData } from "../apiService";
+import { ButtonOutline, ButtonPrimary } from "./button";
+import Option from "./options";
 
 const Submarines = () => {
   const [data, setData] = useState(null); // State to hold the response data
   const [submarines, setSubmarines] = useState([
-    { available: false, value: '1', label: 'Zerefez' },
-    { available: false, value: '2', label: 'KHALed' },
-    { available: false, value: '3', label: 'Muhandizi' },
-    { available: false, value: '4', label: 'shah rukh khanizzi' },
-    { available: false, value: '5', label: 'AHmadizzi Uchiha' },
-    { available: false, value: '6', label: 'DAnielizzi' },
-    { available: false, value: '7', label: 'ERMRZZI' },
-    { available: false, value: '8', label: 'CHrisizzi' },
-    { available: false, value: '9', label: 'ALIZZI' },
+    { available: false, value: "1", label: "Zerefez" },
+    { available: false, value: "2", label: "KHALed" },
+    { available: false, value: "3", label: "Muhandizi" },
+    { available: false, value: "4", label: "Shah Rukh Khanizzi" },
+    { available: false, value: "5", label: "Ahmadizzi Uchiha" },
+    { available: false, value: "6", label: "Danielizzi" },
+    { available: false, value: "7", label: "ERMRZZI" },
+    { available: false, value: "8", label: "Chrisizzi" },
+    { available: false, value: "9", label: "ALIZZI" },
   ]);
 
   useEffect(() => {
-    async function testFetch() {
-      setData(await fetchData());
-      console.log('Useeffect');
+    async function fetchDataAndSetSubmarines() {
+      const result = await fetchData();
+      setData(result);
+
+      // Simulate available submarines from fetched data
+      const updatedSubmarines = submarines.map((sub, index) => ({
+        ...sub,
+        available: index % 2 === 0, // Example: Alternate submarines are available
+      }));
+      setSubmarines(updatedSubmarines);
     }
 
-    testFetch();
+    fetchDataAndSetSubmarines();
   }, []);
+
   return (
     <section id="home" className="pt-28 lg:pt-36">
       <div className="w-full max-w-[1300px] mx-auto px-10 lg:grid lg:grid-cols-2 lg:gap-10">
@@ -77,7 +85,10 @@ const Submarines = () => {
         </div>
       </div>
 
-      <p>{data ? data : 'ingen data lige nu..'}</p>
+      {/* Pass the submarines to Option */}
+      <Option availableSubmarine={submarines} />
+
+      <p>{data ? data : "ingen data lige nu.."}</p>
     </section>
   );
 };
