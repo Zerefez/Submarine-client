@@ -5,7 +5,7 @@ import StepChart from '../stepChart';
 import MeasurementData from './measurementData'; // Import the MeasurementData class
 
 const Lake3DContourPlot = (props) => {
-  const { socket } = props;
+  const { socket, status } = props;
 
   const [chartData, setChartData] = useState([]);
   const [depthOverTime, setDepthOverTime] = useState([]);
@@ -18,13 +18,13 @@ const Lake3DContourPlot = (props) => {
         try {
           const rawData = JSON.parse(event.data);
 
-          if (!rawData.type) {
+          if (Array.isArray(rawData)) {
             const processedMeasurements = rawData
               .map((sensor) => {
                 const measurement = new MeasurementData(
                   sensor.temperatur, // Temperature
                   sensor.oxygen, // Oxygen
-                  null, // Pressure (not available in raw data)
+                  sensor.dybde, // Pressure (not available in raw data)
                   null // Spring layers (not available in raw data)
                 );
                 return measurement.verifyData() ? measurement : null;
@@ -35,9 +35,7 @@ const Lake3DContourPlot = (props) => {
 
             // Update chartData and depthOverTime
             const flatData = processedMeasurements.map((measurement) => ({
-              depth: rawData.sensors.find(
-                (sensor) => sensor.temperatur === measurement.getTemperature()
-              ).dybde,
+              depth: measurement.getDepth(),
               temperature: measurement.getTemperature(),
               oxygen: measurement.getOxygen(),
             }));

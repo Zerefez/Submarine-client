@@ -42,9 +42,7 @@ function App() {
       setStatus('CLOSED');
     }
 
-    ws.addEventListener('message', function (message) {
-      document.getElementById('wsupdate').innerHTML = message.data;
-    });
+    ws.addEventListener('message', function (message) {});
 
     setSocket(ws);
   }, []);
