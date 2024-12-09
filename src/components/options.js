@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import OptionCard from './optioncard';
 import LinearWithValueLabel from './progressbar';
 
@@ -150,7 +150,7 @@ const Option = (props) => {
   };
 
   return (
-    <section id="analytics" className="section">
+    <section id="analysis" className="section">
       <div className="container">
         <h2 className="headline-2">These are your test options</h2>
         <p className="text-zinc-400 mt-3 mb-8 max-w-[50ch]">
