@@ -12,7 +12,7 @@ function App() {
   const [socket, setSocket] = useState(null);
   const [status, setStatus] = useState(''); // Track WebSocket status
   const [submarines, setSubmarines] = useState([
-    { available: false, value: '1', label: 'Zerefez' },
+    { available: true, value: '1', label: 'Zerefez' },
     { available: false, value: '2', label: 'KHALed' },
     { available: false, value: '3', label: 'Muhandizi' },
     { available: false, value: '4', label: 'Shah Rukh Khanizzi' },

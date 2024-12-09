@@ -101,6 +101,25 @@ const Option = (props) => {
         prev.map((running, i) => (i === index ? false : running))
       );
     }, 8000); // Stop after 8 seconds
+
+    const data = {
+      measurementDepth: inputDepth, // The key is now 'measurementDepth'
+    };
+
+    fetch('http://192.168.0.1:8080/api/PostMeasurementDepth', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data), // Send the data object as a JSON string
+    })
+      .then((response) => response.json()) // Parse the response as JSON
+      .then((data) => {
+        console.log('Success:', data); // Handle success
+      })
+      .catch((error) => {
+        console.error('Error:', error); // Handle error
+      });
   };
 
   const handleDepthChange = (index, value) => {
