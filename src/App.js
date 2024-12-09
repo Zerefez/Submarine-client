@@ -1,4 +1,5 @@
-import Data from './components/data/displayData';
+import DisplayDataTable from './components/data/displayDataCollection';
+import Graph from './components/data/displayGraphs';
 import Options from './components/options';
 import Submarines from './components/submarines';
 import About from './pages/about';
@@ -62,7 +63,8 @@ function App() {
           submarines={submarines}
           setSubmarines={setSubmarines}
         />
-        <Data socket={socket} status={status} />
+        <DisplayDataTable />
+        <Graph socket={socket} status={status} />
         <Contact />
       </main>
       <Footer />

@@ -129,13 +129,13 @@ const Lake3DContourPlot = (props) => {
   return (
     <section id="data" className="section">
       <div className="container">
-        <h2 className="headline-2 mb-12 lg:mb-0">Lake Data</h2>
+        <h2 className="headline-2 mb-12 lg:mb-0">Measurement Data Graphs</h2>
         <div
           id="lakeDiv"
           className="mt-12 relative p-4 rounded-2xl bg-zinc-800 ring-1 ring-inset ring-zinc-50/5 transition-colors shadow-md w-full"
           style={{ width: '100%', height: '700px' }}
         />
-        <div className="mt-12 lg:grid lg:grid-cols-2 lg:items-stretch">
+        <div className="mt-12 lg:items-stretch">
           <Areachart
             data={chartData}
             xKey="depth"
