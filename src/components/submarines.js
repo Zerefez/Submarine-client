@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { ButtonOutline, ButtonPrimary } from './button';
-import Option from './options';
 
 const Submarines = (props) => {
   const { socket, submarines, setSubmarines } = props;
@@ -50,7 +49,7 @@ const Submarines = (props) => {
           <div className="flex items-center gap-3">
             <figure className="w-9 h-9 rounded-lg">
               <img
-                src="images/submarine-2.svg"
+                src="images/submarine2.png"
                 width={40}
                 height={40}
                 alt="Submarine"

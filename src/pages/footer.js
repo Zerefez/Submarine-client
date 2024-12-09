@@ -104,7 +104,7 @@ const Footer = () => {
         <div className="flex items-center justify-between pt-10 mb-8">
           <a href="blank" className="">
             <img
-              src="images\Submarine.svg"
+              src="images\Submarine-logo.png"
               width={40}
               height={40}
               alt="Submarine"

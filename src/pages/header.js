@@ -8,7 +8,7 @@ const Header = () => {
         <h1 className="justify-between items-center">
           <a href="/" className="logo">
             <img
-              src="images\Submarine.svg"
+              src="images\Submarine-logo.png"
               width={40}
               height={40}
               alt="Submarine"
