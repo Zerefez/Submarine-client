@@ -111,11 +111,17 @@ const Option = (props) => {
       headers: {
         'Content-Type': 'application/json',
       },
+
       body: JSON.stringify(data), // Send the data object as a JSON string
     })
       .then((response) => response.json()) // Parse the response as JSON
       .then((data) => {
         console.log('Success:', data); // Handle success
+
+        if (data.message === 'success') {
+          alert('Request: ' + data.details);
+          console.log('TEEEST');
+        }
       })
       .catch((error) => {
         console.error('Error:', error); // Handle error
