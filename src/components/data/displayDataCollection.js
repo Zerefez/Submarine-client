@@ -5,23 +5,17 @@ const DisplayDataTable = () => {
   const tableData = [
     {
       groupid: "er13r12341234r1-3214fqefq",
-      temperature: 12,
-      oxygen: 5000,
-      depth: 1,
+      total_measurement: 300,
       timestamp: "2021-09-01 1:00:00",
     },
     {
-      groupid: "er13r12341234r1-3214fqefq",
-      temperature: 20,
-      oxygen: 7000,
-      depth: 2,
+      groupid: "32142341341-3141fdfasf",
+      total_measurement: 300,
       timestamp: "2021-09-01 1:03:00",
     },
     {
-      groupid: "er13r12341234r1-3214fqefq",
-      temperature: 30,
-      oxygen: 8000,
-      depth: 4,
+      groupid: "dfadfafadf-erqwerqreqewr",
+      total_measurement: 300,
       timestamp: "2021-09-01 1:10:00",
     },
   ];

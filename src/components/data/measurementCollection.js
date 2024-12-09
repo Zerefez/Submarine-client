@@ -39,7 +39,7 @@ const MeasurementTable = ({ data, initialSortConfig }) => {
   return (
     <div className="relative mt-12 overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-zinc-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-zinc-700 dark:text-zinc-400">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-zinc-700 dark:text-zinc-400 i ">
           <tr>
             {Object.keys(data[0]).map((key) => (
               <th
@@ -48,8 +48,8 @@ const MeasurementTable = ({ data, initialSortConfig }) => {
                 className="px-6 py-3 cursor-pointer"
                 onClick={() => sortTable(key)}
               >
-                <div className="flex items-center">
-                  {key.charAt(0).toUpperCase() + key.slice(1)} {getSortIcon(key)}
+                <div className="flex items-center  text-center justify-center">
+                  {key.replace(/_/g, ' ').replace(/\b(\w)/g, (match) => match.toUpperCase())} {getSortIcon(key)}
                 </div>
               </th>
             ))}
@@ -59,7 +59,7 @@ const MeasurementTable = ({ data, initialSortConfig }) => {
           {tableData.map((row, index) => (
             <tr
               key={index}
-              className="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700"
+              className="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700 text-center"
             >
               {Object.values(row).map((value, idx) => (
                 <td key={idx} className="px-6 py-4">
@@ -78,9 +78,7 @@ MeasurementTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       groupid: PropTypes.string.isRequired,
-      temperature: PropTypes.number,
-      oxygen: PropTypes.number,
-      depth: PropTypes.number,
+      total_measurement: PropTypes.number,
       timestamp: PropTypes.string,
     })
   ).isRequired,
