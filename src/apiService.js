@@ -1,25 +1,6 @@
 import MeasurementData from './components/data/measurementData.js';
 import SubmarineData from './components/data/submarineData.js';
 
-async function fetchData() {
-  try {
-    const response = await fetch('http://192.168.0.1:8080/api/submarines');
-    console.log('Test from fetchData');
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const data = await response.text();
-    console.log(data);
-
-    return data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-}
-
-export { fetchData };
-
 class ApiService {
   constructor(baseURL) {
     this.baseURL = baseURL; // Base URL for the API
@@ -133,37 +114,3 @@ class ApiService {
 export default ApiService;
 
 // Example usage
-(async () => {
-  const apiService = new ApiService('http://192.168.0.1:8080/api');
-
-  try {
-    // Fetch environmental measurements
-    const environmentalMeasurements =
-      await apiService.getEnvironmentalMeasurements();
-    console.log('Environmental Measurements:');
-    environmentalMeasurements.forEach((measurement) => {
-      console.log(`
-              Temperature: ${measurement.getTemperature()} °C
-              Oxygen Level: ${measurement.getOxygen()}%
-              Pressure: ${measurement.getPressure()} hPa
-              Spring Layers: ${measurement.getSpringLayers()}
-              Timestamp: ${measurement.timestamp}
-              Data Verified: ${measurement.verifyData()}
-          `);
-    });
-
-    // Fetch spring layer count
-    const springLayerCount = await apiService.getSpringLayerCount();
-    console.log(`Spring Layer Data (Number of Layers): ${springLayerCount[0]}`);
-
-    // Get all environmental data
-    const allEnvironmentalData = apiService.getEnvironmentalData();
-    console.log('All Environmental Data:', allEnvironmentalData);
-
-    // Get all spring layer data
-    const allSpringLayerData = apiService.getSpringLayerData();
-    console.log('All Spring Layer Data:', allSpringLayerData);
-  } catch (error) {
-    console.error('An error occurred:', error.message);
-  }
-})();

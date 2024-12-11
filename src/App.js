@@ -6,6 +6,7 @@ import About from './pages/about';
 import Contact from './pages/contact';
 import Footer from './pages/footer';
 import Header from './pages/header';
+import ApiService from './apiService';
 
 import { useEffect, useState } from 'react';
 
@@ -23,6 +24,8 @@ function App() {
     { available: false, value: '8', label: 'Chrisizzi' },
     { available: false, value: '9', label: 'ALIZZI' },
   ]);
+
+  const [selectedMeasurement, setSelectedMeasurement] = useState('');
 
   useEffect(() => {
     const ws = new WebSocket('ws://192.168.0.1:8080/live');
@@ -48,6 +51,8 @@ function App() {
     setSocket(ws);
   }, []);
 
+  useEffect(() => {}, [selectedMeasurement]);
+
   return (
     <>
       <Header />
@@ -63,8 +68,12 @@ function App() {
           submarines={submarines}
           setSubmarines={setSubmarines}
         />
-        <DisplayDataTable />
-        <Graph socket={socket} status={status} />
+        <DisplayDataTable setSelectedMeasurement={setSelectedMeasurement} />
+        <Graph
+          socket={socket}
+          status={status}
+          selectedMeasurement={selectedMeasurement}
+        />
         <Contact />
       </main>
       <Footer />
