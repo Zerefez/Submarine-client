@@ -3,9 +3,7 @@ class SubmarineData {
         this.id = id;
         this.name = name;
         this.isAvailable = isAvailable;
-        this.length = length;
-        this.width = width;
-        this.weight = weight;
+
     }
 
     // Method to display submarine details
