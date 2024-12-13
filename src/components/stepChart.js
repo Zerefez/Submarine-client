@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   CartesianGrid,
   Legend,
@@ -8,9 +8,13 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from "recharts";
+} from 'recharts';
 
 function StepChart({ data, xKey, yKey, yLabel, xLabel, title }) {
+  const maxDepth = Math.max(1, ...data.map((item) => item.depth)); // Ensure maxDepth is at least 1
+
+  const ticks = Array.from({ length: maxDepth + 1 }, (_, i) => i);
+
   return (
     <div className="mb-8">
       <h2 className="text-center text-2xl font-bold mb-4">{title}</h2>
@@ -26,17 +30,17 @@ function StepChart({ data, xKey, yKey, yLabel, xLabel, title }) {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
-            label={{ value: xLabel, position: "bottom", offset: -10 }}
+            label={{ value: xLabel, position: 'bottom', offset: -10 }}
             dataKey={xKey}
           />
           <YAxis
             label={{
               value: yLabel,
               angle: -90,
-              position: "insideLeft",
+              position: 'insideLeft',
               offset: 20,
             }}
-            ticks={[5, 4, 3, 2, 1, 0]}
+            ticks={ticks}
             domain={[5, 0]}
             reversed={true}
           />

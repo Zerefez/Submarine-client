@@ -112,6 +112,8 @@ const Lake3DContourPlot = (props) => {
               depth: data.depth,
             }));
 
+            console.log('DEPTHTIMEDATA', depthTimeData);
+
             setChartData(flatData);
             setDepthOverTime(depthTimeData);
             setSocketMessages((prevMessages) => [...prevMessages, event.data]);
@@ -157,12 +159,14 @@ const Lake3DContourPlot = (props) => {
               showlines: false,
             },
             colorbar: {
-              title: 'Oxygen (mg/L)',
+              title: 'Oxygen (μg/L)',
               tickfont: { color: '#D1D5DB' },
               titlefont: { color: '#D1D5DB' },
             },
           },
         ];
+
+        console.log('CHARTDATA,', chartData);
 
         const layout = {
           title: {
@@ -222,7 +226,7 @@ const Lake3DContourPlot = (props) => {
             title="Oxygen vs Depth"
           />
           <StepChart
-            data={depthOverTime}
+            data={chartData}
             yKey="depth"
             xLabel="Measurement"
             yLabel="Depth (m)"
